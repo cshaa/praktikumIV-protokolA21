@@ -310,34 +310,48 @@ Naměřil jsem 3.
 
 \begin{figure}[p]
     \begin{gnuplot}[terminal=epslatex,terminaloptions=color]
-        
+
+
+        load 'matlib.cfg'
+        load 'vzorce.cfg'
+
+
+
+        # načti první soubor
+
+        LF_File = 'fits1.csv.tmp'
+        LF_Columns = 3
+        load 'loadfile.cfg'
+
+        m = sliceArray('LF_Col1','psi',1,0)
+        @m
+        m = sliceArray('LF_Col2','phi',1,0)
+        @m
+
+        do for [i=1:|psi|] { psi[i] = real(psi[i]) }
+        do for [i=1:|phi|] { phi[i] = real(phi[i]) }
+
+
+        # vypočítej průsečíky
+
+        N = nCr(|psi|, 2)
+        array xint[N]
+        array yint[N]
+
+        i = 1
+        do for [j=1:|psi|] {
+            do for [k=1:j-1] {
+                xint[i] = xintf(psi[j], phi[j], psi[k], phi[k])
+                yint[i] = yintf(psi[j], phi[j], psi[k], phi[k])
+                i = i + 1
+            }
+        }
+
+
         set xlabel "x"
         set ylabel "y"
 
-        xa(psi) = -cos(psi)
-        ya(psi) = -sin(psi)
-
-        xb(psi, phi) = cos(psi + phi)
-        yb(psi, phi) = sin(psi + phi)
-
-        ax(psi, phi) = yb(psi, phi) - ya(psi)
-        ay(psi, phi) = xa(psi) - xb(psi, phi)
-
-        b(psi, phi) = ax(psi, phi)*xa(psi) + ay(psi, phi)*ya(psi)
-
-        det(psi1, phi1, psi2, phi2) = \
-            ax(psi1, phi1)*ay(psi2, phi2) - ay(psi1, phi1)*ax(psi2, phi2)
-
-        xint(psi1, phi1, psi2, phi2) = ( \
-                b(psi1, phi1) * ay(psi2, phi2) - \
-                b(psi2, phi2) * ay(psi1, phi1) \
-            ) / det(psi1, phi1, psi2, phi2)
-
-        yint(psi1, phi1, psi2, phi2) = ( \
-                b(psi2, phi2) * ax(psi1, phi1) - \
-                b(psi1, phi1) * ax(psi2, phi2) \
-            ) / det(psi1, phi1, psi2, phi2)
-
+        plot sample [i=2:LF_Rows] '+' using (xint[i]):(yint[i]) notitle
     \end{gnuplot}
 \end{figure}
 
