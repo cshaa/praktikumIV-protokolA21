@@ -221,12 +221,17 @@ Naměřil jsem 3.
         set key left bottom
         set key box vertical width 1 height 1 maxcols 0.3 spacing 1
 
+        f(x) = a*x + b
+        fit f(x) 'data2' using 1:($3 == 0 ? $2 : 1/0) via a, b
+
         plot \
             'data2' using 1:($3 == 0 ? $2 : 1/0) \
                 ps 3 lc palette cb 0 title "nestíněný", \
             \
             'data2' using 1:($3 == 1 ? $2 : 1/0) \
-                ps 3 lc palette cb 1 title "stíněný" \
+                ps 3 lc palette cb 1 title "stíněný", \
+            \
+            f(x) lc palette cb 0 dashtype ' _ ' notitle
 
     \end{gnuplot}
 \end{figure}
@@ -311,7 +316,6 @@ Naměřil jsem 3.
 \begin{figure}[p]
     \begin{gnuplot}[terminal=epslatex,terminaloptions=color]
 
-
         load 'matlib.cfg'
         load 'vzorce.cfg'
 
@@ -332,26 +336,100 @@ Naměřil jsem 3.
         do for [i=1:|phi|] { phi[i] = real(phi[i]) }
 
 
-        # vypočítej průsečíky
+        # vypočítej průsečíky prvního
 
         N = nCr(|psi|, 2)
-        array xint[N]
-        array yint[N]
+        array xintA[N]
+        array yintA[N]
 
         i = 1
         do for [j=1:|psi|] {
             do for [k=1:j-1] {
-                xint[i] = xintf(psi[j], phi[j], psi[k], phi[k])
-                yint[i] = yintf(psi[j], phi[j], psi[k], phi[k])
+                xintA[i] = xintf(psi[j], phi[j], psi[k], phi[k])
+                yintA[i] = yintf(psi[j], phi[j], psi[k], phi[k])
                 i = i + 1
             }
         }
 
+        plnA = ""
+        defA = ""
+        do for [i=1:|psi|] {
+            defA = defA."; ".line("lineA".i, psi[i], phi[i])
+            plnA = plnA.", lineA".i."(x) notitle"
+        }
+        @defA
+
+
+        # načti druhý soubor
+
+        LF_File = 'fits3.csv.tmp'
+        LF_Columns = 5
+        load 'loadfile.cfg'
+
+        n = |LF_Col1| - 1
+        N = 2 * n
+
+        array psi[N]
+        array phi[N]
+
+        do for [i=1:n] {
+            psi[i]   = real(LF_Col1[i+1])
+            psi[i+n] = real(LF_Col1[i+1])
+        }
+
+        do for [i=1:n] { phi[i]   = real(LF_Col2[i+1]) }
+        do for [i=1:n] { phi[i+n] = real(LF_Col4[i+1]) }
+
+
+
+        # vypočítej průsečíky druhého
+
+        N = nCr(|psi|, 2) + 1
+        array xintB[N]
+        array yintB[N]
+
+        i = 1
+        do for [j=1:|psi|] {
+            do for [k=1:j-1] {
+                xintB[i] = xintf(psi[j], phi[j], psi[k], phi[k])
+                yintB[i] = yintf(psi[j], phi[j], psi[k], phi[k])
+                i = i + 1
+            }
+        }
+
+        plnB = ""
+        defB = ""
+        do for [i=1:|psi|] {
+            defB = defB."; ".line("lineB".i, psi[i], phi[i])
+            plnB = plnB.", lineB".i."(x) notitle"
+        }
+        @defB
+
+
+        #vykresli
+
+        set multiplot layout 1, 2
 
         set xlabel "x"
         set ylabel "y"
 
-        plot sample [i=2:LF_Rows] '+' using (xint[i]):(yint[i]) notitle
+        set size square
+        set xrange [-0.5:0.5]
+        set yrange [-0.5:0.5]
+        
+        set title "Jednovzorkový setup"
+        plot \
+            sample [i=2:|xintA|] '+' using (xintA[i]):(yintA[i]) notitle \
+            @plnA
+
+        unset ylabel
+        
+        set title "Dvouvzorkový setup"
+        plot \
+            sample [i=2:|xintB|] '+' using (xintB[i]):(yintB[i]) notitle \
+            @plnB
+
+        
     \end{gnuplot}
 \end{figure}
 
