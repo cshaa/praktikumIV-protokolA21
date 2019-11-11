@@ -29,7 +29,9 @@
 \usepackage{graphicx}
 \usepackage{lmodern}
 \usepackage{amsmath}
-\usepackage[top = 2cm, bottom = 2cm, left = 2cm, right = 2cm]{geometry}
+\usepackage{hyperref}
+\usepackage{gensymb}
+\usepackage[top = 1.5cm, bottom = 1.5cm, left = 1.5cm, right = 1.5cm]{geometry}
 
 % Pro titulní stránku
 \usepackage{titlesec}
@@ -42,6 +44,9 @@
 \usepackage{epstopdf}
 \usepackage{csvsimple}
 
+
+\renewcommand{\U}[1]{\ensuremath{\,\mathrm{#1}}}
+\newcommand{\°}{\degree}
 
 \newcommand{\titjmeno}{Michal Grňo}
 \newcommand{\titobor}{FOF}
@@ -82,69 +87,140 @@ Teorie\cite{DUMMY:1}
     \label{A}
 \end{equation*}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=10cm]{schema.png}
-    \caption{Schéma koincidenčního měření, převzato z [1].}
-\end{figure}
-
 
 \section{Výsledky měření}
 Naměřil jsem 3.
 
 
-\begin{table}[h!]
+\begin{figure}[p]
     \centering
-    \begin{tabular}{r|r|r}
-        % Hlavička
-        \bfseries $\psi$ &
-        \bfseries $\varphi$ &
-        \bfseries $\Delta\varphi$
+    \begin{gnuplot}[terminal=epslatex,terminaloptions=color]
+        data = 'data/CO_GRNO.PRN'
+        set xrange [2500:2000] reverse
+        set xlabel "$k \\; [\\U{cm^{-1}}]$"
+        set ylabel "$T$"
+        plot \
+            data using ($1 >= 2385 ? $1 : 1/0):2 w l lc black notitle, \
+            data using (2385 >= $1 && $1 >= 2349 ? $1 : 1/0):2 w l t "$CO_2, P$", \
+            data using (2349 >= $1 && $1 >= 2290 ? $1 : 1/0):2 w l t "$CO_2, R$", \
+            data using (2290 >= $1 && $1 >= 2238 ? $1 : 1/0):2 w l lc black notitle, \
+            data using (2238 >= $1 && $1 >= 2143 ? $1 : 1/0):2 w l t "$CO, P$", \
+            data using (2143 >= $1 && $1 >= 2033 ? $1 : 1/0):2 w l t "$CO, R$", \
+            data using (2033 >= $1 ? $1 : 1/0):2 w l lc black notitle
+    \end{gnuplot}
+    \caption{Měření transmitance CO.}
+    \label{co-trans}
+\end{figure}
 
-        % Soubor
-        % \csvreader[ head to column names ]{fits1.csv.tmp}{}
-        % {
-        %     \csviffirstrow{\\\hline}{\\} \psival\ & \phival & \phierr
-        % }
-    \end{tabular}
-
-    \caption{Úhly získané regresí}
-    \label{tab-fity-1vz}
-\end{table}
-
-
-\begin{table}[h!]
+\begin{figure}[p]
     \centering
-    \begin{tabular}{r|r|r|r|r}
-        % Hlavička
-        \bfseries $\psi$ &
-        \bfseries $\varphi_1$ &
-        \bfseries $\Delta\varphi_1$ &
-        \bfseries $\varphi_2$ &
-        \bfseries $\Delta\varphi_2$
+    \begin{gnuplot}[terminal=epslatex,terminaloptions={color size 15cm,10cm}]
 
-        % Soubor
-        % \csvreader[ head to column names ]{fits3.csv.tmp}{}
-        % {
-        %     \csviffirstrow{\\\hline}{\\}
-        %     \psival\ &
-        %     \phiA & \phiAerr &
-        %     \phiB & \phiBerr
-        % }
-    \end{tabular}
-    
-    \caption{Úhly získané regresí}
-    \label{tab-fity-1vz}
-\end{table}
+        load 'matlib.cfg'
+        h = 6.62607015e-34
+        c = 299792458
 
+        LF_File = 'data/co_tab_grno.txt'
+        LF_Columns = 6
+        load 'loadfile.cfg'
+        N = LF_Rows - 1
 
+        stred_i = -1
+
+        array Energie[N]
+        do for [i = 1:N] {
+            Energie[i] = real(LF_Col1[i+1]) * 100 * h * c
+            if (stred_i == -1 && Energie[i] >= 214500*h*c) {
+                stred_i = i
+            }
+        }
+
+        array R[stred_i - 1]
+        array P[N - stred_i + 1]
+        do for [i = 1:N] {
+            if (i < stred_i) { R[stred_i - i] = Energie[i] }
+            else { P[i - stred_i + 1] = Energie[i] }
+        }
+
+        set multiplot layout 2,1
+
+        set yrange [4:4.5]
+        set ytics 0.1
+        set xlabel "$J$"
+        set ylabel "$P_J, R_J \\; [10^{-20} \\U{J}]$"
+        set key outside
+        set key right center
+
+        plot sample \
+            [i=1:|P|:1] '+' using (i):(P[i]*1e20) t "$P_J$", \
+            [i=1:|R|:1] '+' using (i-1):(R[i]*1e20) t "$R_J$"
+
+        N = min(|R|+1, |P|)
+
+        array X1[N]
+        array Y1[N]
+        array Y1_scaled[N]
+
+        do for [i=2:N] {
+            X1[i] = (2*i-1)**2
+            Y1[i] = (R[i-1] - P[i]) / ( (2*i-1) * h)
+            Y1_scaled[i] = Y1[i] / 1e11
+        }
+
+        M = min(|R|+2, |P|-1)
+
+        array X2[M]
+        array Y2[M]
+        array Y2_scaled[M]
+
+        do for [i=3:M] {
+            X2[i] = (2*i-1)**2
+            Y2[i] = (R[i-2] - P[i+1]) / ( (2*i-1) * h)
+            Y2_scaled[i] = Y2[i] / 1e11
+        }
+
+        set xtics rotate
+        set yrange [-1.15:-1.12]
+        set ytics   0.01
+        set xlabel "$\\left(2J + 1\\right)^2$"
+        set ylabel "$\\left(P_a - R_b\\right)/\\mathrm{h}\\left(2J + 1\\right) \\; [10^{11}\\U{s^{-1}}]$"
+        plot sample \
+            [i=2:N:1] '+' using (X1[i]):(Y1_scaled[i]) t "$R_J - P_J$", \
+            [i=3:M:1] '+' using (X2[i]):(Y2_scaled[i]) t "$R_{J-1} - P_{J+1}$", \
+
+    \end{gnuplot}
+    \caption{Energie pásů P a R v CO.}
+    \label{co-fit}
+\end{figure}
 
 \begin{figure}[p]
     \centering
     \begin{gnuplot}[terminal=epslatex,terminaloptions=color]
-        plot 'data/CO_GRNO.PRN'
+        data = 'data/VZDUCH_GRNO.PRN'
+        set key left top
+        set xrange [4500:500] reverse
+        set xlabel "$k \\; [\\U{cm^{-1}}]$"
+        set ylabel "$T$"
+        plot \
+            data using ($1 >= 4000 ? $1 : 1/0):2 w l lc black notitle, \
+            data using (4000 >= $1 && $1 >= 3500 ? $1 : 1/0):2 w l t "$H_2O$, 1. harm.", \
+            data using (3500 >= $1 && $1 >= 2400 ? $1 : 1/0):2 w l lc black notitle, \
+            data using (2400 >= $1 && $1 >= 2240 ? $1 : 1/0):2 w l t "$CO_2$, 1. harm.", \
+            data using (2240 >= $1 && $1 >= 2050 ? $1 : 1/0):2 w l lc black notitle, \
+            data using (2050 >= $1 && $1 >= 1330 ? $1 : 1/0):2 w l t "$H_2O$, 2. harm.", \
+            data using (1330 >= $1 && $1 >= 705  ? $1 : 1/0):2 w l lc black notitle, \
+            data using (705 >= $1 && $1 >= 670.5 ? $1 : 1/0):2 w l t "$CO_2, P$, 2. harm." lc 'red', \
+            data using (670.5 >= $1 && $1 >= 666 ? $1 : 1/0):2 w l t "$CO_2, Q$, 2. harm.", \
+            data using (666 >= $1 && $1 >= 620 ? $1 : 1/0):2 w l t "$CO_2, R$, 2. harm.", \
+            data using (620 >= $1 ? $1 : 1/0):2 w l lc black notitle
     \end{gnuplot}
+    \caption{Měření transmitance vzduchu}
+    \label{vzduch-trans}
 \end{figure}
+
+
+
+\pagebreak
 
 
 \section{Diskuse}

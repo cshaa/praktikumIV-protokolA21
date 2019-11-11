@@ -1,0 +1,62 @@
+{
+	"Graph": {
+		"scope": "latex",
+		"prefix": "GRA",
+		"body": [
+			"\\begin{figure}[p]",
+			"\t\\centering",
+			"\t\\begin{gnuplot}[terminal=epslatex,terminaloptions=color]",
+			"\t\t$3",
+			"\t\\end{gnuplot}",
+			"\t\\caption{$1}",
+			"\t\\label{$2}",
+			"\\end{figure}"
+		],
+		"description": "Insert a graph"
+	},
+	"Table": {
+		"scope": "latex",
+		"prefix": "TAB",
+		"body": [
+			"\\begin{table}[h!]",
+			"\t\\centering",
+			"\t\\begin{tabular}{ r|$3 }",
+			"\t\t\\bfseries $4",
+			"\t\t\\csvreader[ head to column names ]{$5}{}",
+			"\t\t{",
+			"\t\t\t\\csviffirstrow{\\\\\\hline}{\\\\} $6",
+			"\t\t}",
+			"\t\\end{tabular}",
+			"\t\\caption{$1}",
+			"\t\\label{$2}",
+			"\\end{table}"
+		],
+		"description": "Insert a table"
+	},
+	"Figure": {
+		"scope": "latex",
+		"prefix": "FIG",
+		"body": [
+			"\\begin{figure}[H]",
+			"\t\\centering",
+			"\t\\includegraphics[width=0.6\\textwidth]{$1}",
+			"\t\\caption{$2}",
+			"\t\\label{obr:$3}",
+		 	"\\end{figure}"
+		],
+		"description": "Insert a figure"
+
+	},
+	"Equation": {
+		"scope": "latex",
+		"prefix": "EQT",
+		"body": [
+			"\\begin{equation}",
+			"$1",
+			"\\label{eq:$2}",
+			"\\end{equation}"
+		],
+		"description": "Insert an equation"
+
+	}
+}
