@@ -5,7 +5,7 @@
 		"body": [
 			"\\begin{figure}[p]",
 			"\t\\centering",
-			"\t\\begin{gnuplot}[terminal=epslatex,terminaloptions=color]",
+			"\t\\begin{gnuplot}[terminal=epslatex,terminaloptions={color size 18cm, 8cm}]",
 			"\t\t$3",
 			"\t\\end{gnuplot}",
 			"\t\\caption{$1}",
@@ -24,7 +24,7 @@
 			"\t\t\\bfseries $4",
 			"\t\t\\csvreader[ head to column names ]{$5}{}",
 			"\t\t{",
-			"\t\t\t\\csviffirstrow{\\\\\\hline}{\\\\} $6",
+			"\t\t\t\\csviffirstrow{\\\\\\\\\\hline}{\\\\\\\\} $6",
 			"\t\t}",
 			"\t\\end{tabular}",
 			"\t\\caption{$1}",

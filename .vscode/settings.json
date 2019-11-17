@@ -3,6 +3,10 @@
         "*.cfg": "gnuplot"
     },
 
+    "[latex]": {
+        "editor.wordWrap": "on"
+    },
+
     "latex-workshop.latex.recipes": [
         {
             "name": "latexmk 🔃 + graphs + bibtex",

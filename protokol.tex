@@ -33,6 +33,10 @@
 \usepackage{gensymb}
 \usepackage[top = 1.5cm, bottom = 1.5cm, left = 1.5cm, right = 1.5cm]{geometry}
 
+% Bibtex
+\usepackage{etoolbox}
+\patchcmd{\thebibliography}{\section*{\refname}}{}{}{}
+
 % Pro titulní stránku
 \usepackage{titlesec}
 \usepackage{setspace}
@@ -52,10 +56,10 @@
 \newcommand{\titobor}{FOF}
 
 
-\newcommand{\titcislo}{A7}
-\newcommand{\titnazev}{Pozitronová emisní tomografie}
-\newcommand{\titmereni}{7. 10. 2019}
-\newcommand{\titodevzdani}{20. 10. 2019}
+\newcommand{\titcislo}{A20}
+\newcommand{\titnazev}{Fourierovská infračervená spektroskopie}
+\newcommand{\titmereni}{4. 11. 2019}
+\newcommand{\titodevzdani}{11. 11. 2019}
 
 
 \begin{document}
@@ -64,40 +68,50 @@
 
 \section{Pracovní úkoly}
 \begin{enumerate}
-    \item Poté, co vyučující umístí silnější zářič ${}^{22}$Na do stojánku, změřte úhlové rozdělení koincidencí v oblasti úhlů potřebné pro nalezení polohy zářiče, doba měření 20s. Vysvětlete tvar naměřeného úhlového rozdělení, získané poznatky využijte při domácím zpracování.
-
-    \item Změřte četnost koincidencí pro úhly $\phi$ = 60°, 90°, 120° bez plechu a 120° s Pb plechem mezi detektory, doba měření 100s. Vysvětlete pozorované četnosti.
-    
-    \item Poté, co vyučující přidá do krabičky druhý zářič, změřte úhlové rozdělení koincidencí s krokem 5°.
-    
-    \item Zvolte aspoň 2 další vhodné úhly otočení krabičky $\psi$ a opakujte měření 3).
-    
-    \item Narýsujte přímky spojující detektory do obrázku připraveného u úlohy a odečtěte polohu průsečíku - polohu zářiče vůči krabičce. Pozn.: Při volbě otočení krabičky $\psi$ se můžete řídit polohou už zakreslených průsečíků.
-    
-    \item Vzdálenost detektoru od zářiče zakresleného na obrázku porovnejte s měřením skutečné vzdálenosti.
-    
-    \item Polohy zářičů vůči krabičce určujte pomocí vztahů a metod popsaných v návodu. Podle výsledků zpracování nakreslete obrázky analogické k obrázkům narýsoaným během praktika. Chyby polohy zářičů určete graficky
+    \item Proměřte rotačně-vibrační absorpční spektrum oxidu uhelnatého ve spektrální oblasti 2000 – 2500 $\U{cm^{-1}}$. Polohy absorpčních pásů zpracujte graficky a lineární regresí určete parametry vystupující v modelu pružného rotátoru pro základní vibrační stav molekuly a první excitovaný vibrační stav. Z těchto parametrů určete vzdálenosti jader uhlíku a kyslíku v základním a prvním excitovaném vibračním stavu.
+    \item Spočtěte teplotní a tlakové rozšíření absorpčních pásů, určete rozdíl vibrační frekvence pro isotopomery $^{12}$C$^{16}$O a $^{13}$C$^{16}$O. Porovnejte tyto hodnoty s rozlišením použitého spektrálního přístroje.
+    \item Změřte spektrum bez vzorku, určete oblasti absorpce oxidu uhličitého a vodních par v optické dráze spektrometru. Interpretujte nejvýraznější pásy absorpce CO$_2$.
+    \item Proměřte spektra propustnosti polyetylénové a polypropylénové folie a interpretujte nejvýraznější pásy.
+    \item Proměřte spektra propustnosti a odrazivosti skleněné a safírové destičky. Diskutujte rozdíl mezi oběma vzorky.
 \end{enumerate}
 
 
 \section{Teoretická část}
-Teorie\cite{DUMMY:1}
-\begin{equation*}
-    A = 4
-    \label{A}
-\end{equation*}
+Infračervená spektroskopie je nástroj používaný k identifikaci molekul přítomných v látce podle módů jejich mechanických kmitů. Konkrétně Fourierovská infračervená spektroskopie detekuje změny ve spektru průchozího elektromagnetického záření způsobené interakcí s kmitající molekulou.
 
+U jednoduchých molekul lze v jejich spektru pozorovat tři charakteristické oblasti –
+nízkofrekvenční\footnote{Nízkofrekvenční pás P bude v nižších hodnotách $f \propto \tilde{\nu}$, v grafu to ovšem znamená, že bude vpravo\dots} pás P odpovídající oblasti, kde se rotační energie a energie fotonu skládají, střední pás Q odpovídající vibračním přechodům beze změny rotačního stavu (a kvantového čísla $J$), vysokofrekvenční\footnote{\dots pás R bude naopak mít vysoké hodnoty $\tilde\nu$ a v grafu bude vlevo.} oblast R, kde energie fotonů přispívá jak vibračním, tak rotačním stavům. \cite{studijni-text}
+
+Z vlnočtu pásů, který naměříme pomocí spektroskopie, lze snadno vypočítat jejich energii:
+\begin{equation}
+    E = \mathrm{h} \mathrm{c} \tilde\nu,
+    \label{energie}
+\end{equation}
+kde $\mathrm{h}$ je Planckova konstanta, $\mathrm{c}$ rychlost světla a $\tilde\nu = \lambda^{-1}$ vlnové číslo. U dvouatomové molekuly pro energii odpovídající pásům $P$ a $R$ při stavu $J$ v základním stavu platí vztah:
+\begin{equation}
+    \frac{ R_J  - P_J }{ 2J + 1 } \; \frac{1}{\mathrm{h}}
+    =  \left( 2B_1 - 3D_1 \right)  - D_1  \left( 2J+1 \right)^2,
+    \label{regrese-zakladni}
+\end{equation}
+a pro molekuly v excitovaném stavu:
+\begin{equation}
+    \frac{ R_{J-1}  - P_{J+1} }{ 2J + 1 } \; \frac{1}{\mathrm{h}}
+    =  \left( 2B_0 - 3D_0 \right)  - D_0  \left( 2J+1 \right)^2,
+    \label{regrese-excitovany}
+\end{equation}
+kde $B_{0,1}$ a $D_{0,1}$ jsou konstanty charakteristické pro danou molekulu \cite{studijni-text}. Pokud známe závislosti $R_J(J)$ a $P_J(J)$, tyto konstanty lze určit lineární regresí z rovnic \eqref{regrese-zakladni} a \eqref{regrese-excitovany}.
 
 \section{Výsledky měření}
-Naměřil jsem 3.
+
+\subsection{CO}
 
 
 \begin{figure}[p]
     \centering
-    \begin{gnuplot}[terminal=epslatex,terminaloptions=color]
+    \begin{gnuplot}[terminal=epslatex,terminaloptions={color size 18cm, 8cm}]
         data = 'data/CO_GRNO.PRN'
         set xrange [2500:2000] reverse
-        set xlabel "$k \\; [\\U{cm^{-1}}]$"
+        set xlabel "$\\tilde\\nu \\; [\\U{cm^{-1}}]$"
         set ylabel "$T$"
         plot \
             data using ($1 >= 2385 ? $1 : 1/0):2 w l lc black notitle, \
@@ -152,8 +166,11 @@ Naměřil jsem 3.
         set key right center
 
         plot sample \
-            [i=1:|P|:1] '+' using (i):(P[i]*1e20) t "$P_J$", \
-            [i=1:|R|:1] '+' using (i-1):(R[i]*1e20) t "$R_J$"
+            [i=1:|P|:1] '+' using (i):(P[i]*1e20) pt 5 t "$P_J$", \
+            [i=1:|R|:1] '+' using (i-1):(R[i]*1e20) pt 4 t "$R_J$"
+
+
+        YSCALE = 1 / 1.e11;
 
         N = min(|R|+1, |P|)
 
@@ -161,11 +178,20 @@ Naměřil jsem 3.
         array Y1[N]
         array Y1_scaled[N]
 
+        set print 'fit1.dat.tmp'
+        f1(x) = a1 * x + b1
+
         do for [i=2:N] {
             X1[i] = (2*i-1)**2
             Y1[i] = (R[i-1] - P[i]) / ( (2*i-1) * h)
-            Y1_scaled[i] = Y1[i] / 1e11
+            Y1_scaled[i] = Y1[i] * YSCALE
+
+            print sprintf("%f %f", X1[i], Y1[i])
         }
+
+        fit f1(x) 'fit1.dat.tmp' via a1, b1
+        f1_scaled(x) = f1(x) * YSCALE
+
 
         M = min(|R|+2, |P|-1)
 
@@ -173,51 +199,180 @@ Naměřil jsem 3.
         array Y2[M]
         array Y2_scaled[M]
 
+        set print "fit2.dat.tmp"
+        f2(x) = a2 * x + b2
+
         do for [i=3:M] {
             X2[i] = (2*i-1)**2
             Y2[i] = (R[i-2] - P[i+1]) / ( (2*i-1) * h)
-            Y2_scaled[i] = Y2[i] / 1e11
+            Y2_scaled[i] = Y2[i] * YSCALE
+
+            print sprintf("%f %f", X2[i], Y2[i])
         }
+
+        fit f2(x) 'fit2.dat.tmp' via a2, b2
+        f2_scaled(x) = f2(x) * YSCALE
+
 
         set xtics rotate
         set yrange [-1.15:-1.12]
         set ytics   0.01
         set xlabel "$\\left(2J + 1\\right)^2$"
-        set ylabel "$\\left(P_a - R_b\\right)/\\mathrm{h}\\left(2J + 1\\right) \\; [10^{11}\\U{s^{-1}}]$"
+        set ylabel "$\\left(P_a - R_b\\right)/\\mathrm{h}\\left(2J + 1\\right)$\n$[10^{11}\\U{s^{-1}}]$" font ",40"
         plot sample \
-            [i=2:N:1] '+' using (X1[i]):(Y1_scaled[i]) t "$R_J - P_J$", \
-            [i=3:M:1] '+' using (X2[i]):(Y2_scaled[i]) t "$R_{J-1} - P_{J+1}$", \
+            [i=2:N:1] '+' using (X1[i]):(Y1_scaled[i]) pt 5 lc 1 notitle, \
+            [i=3:M:1] '+' using (X2[i]):(Y2_scaled[i]) pt 4 lc 2 notitle, \
+            f1_scaled(x) lc 1 notitle, f2_scaled(x) lc 2 notitle, \
+            '+' using (1/0) w lp pt 5 lc 1 t "$R_J - P_J$", \
+            '+' using (1/0) w lp pt 4 lc 2 t "$R_{J-1} - P_{J+1}$"
+
+
+
+        b1_exp = exponent(b1)
+        b2_exp = exponent(b1)
+        a1_exp = exponent(a1)
+        a2_exp = exponent(a2)
+
+        set print "fitCO.csv.tmp"
+        print sprintf("coleqn,colvalue,colstdev")
+        print sprintf("$2B_1 - 3D_1 \\; [10^{%d} \\U{s^{-1}}]$,%.4f,%.4f", b1_exp, manexp(b1,-b1_exp), manexp(b1_err,-b1_exp))
+        print sprintf("$2B_1 - 3D_1 \\; [10^{%d} \\U{s^{-1}}]$,%.4f,%.4f", b2_exp, manexp(b2,-b2_exp), manexp(b2_err,-b2_exp))
+        print sprintf("$D_1 \\;\\; [10^{%d} \\U{s^{-1}}]$,%.2f,%.2f", a1_exp, manexp(-a1, -a1_exp), manexp(a1_err, -a1_exp))
+        print sprintf("$D_0 \\;\\; [10^{%d} \\U{s^{-1}}]$,%.2f,%.2f", a2_exp, manexp(-a2, -a2_exp), manexp(a2_err, -a2_exp))
+
+        B1 = .5*(b1 - 3*a1)
+        B1_err = .5*sqrt( b1_err**2 - (3*a1_err)**2 )
+
+        B0 = .5*(b2 - 3*a2)
+        B0_err = .5*sqrt( b2_err**2 - (3*a1_err)**2 )
+        
+        print sprintf("$B_1$,%.0f,%.0f", B1, B1_err)
+        print sprintf("$B_0$,%.0f,%.0f", B0, B0_err)
 
     \end{gnuplot}
     \caption{Energie pásů P a R v CO.}
     \label{co-fit}
-\end{figure}
+\end{figure} 
+
+Jako první vzorek jsme měřili transmitanci kyvety se stěnami z CaF$_2$ obsahující CO pod tlakem $7 \U{mbar}$. Měření bylo předem kalibrováno na transmitanci vzduchu a probíhalo na rozsahu $2000$ až $2500 \U{cm^{-1}}$ při rozlišení $0,35 \U{cm^{-1}}$. Protože se mezi kalibrací a měřením změnil podíl CO$_2$ v měřeném prostoru, bylo kromě spektra CO viditelné i spektrum CO$_2$. V obou případech byla jasně rozlišitelná pásma P a R, pásmo Q nebylo pozorováno. Zatímco v případě CO jsou jasně rozlišitelná absorpční maxima odpovídající pásům $P_J$ a $R_J$ pro celočíselné hodnoty $J$, spektrum CO$_2$ vykazuje určitou míru překryvu a jeho maxima nejsou jasně oddělená. Naměřené spektrum bylo zaneseno do grafu na obrázku č. \ref{co-trans}.
+
+Naměřená absorpční maxima jsme potom odstředu očíslovali a jejich vlnočet jsme převedli na energii podle vzorce \eqref{energie}. Pás P začíná od jedničky $P_1 = 4.288 \cdot 10^{-20} \U{J}$ a pokračuje k vyšším hodnotám (v grafu doleva), pás R začíná od nuly $R_0 = 4.280 \cdot 10^{-20} \U{J}$ a pokračuje k nižším hodnotám (v grafu doprava). Takto vypočtené a očíslované energie $P_J$ a $R_J$ jsme v závislosti na jejich kvantovém čísle $J$ vynesli do grafu na obrázku č. \ref{co-fit} nahoře.
+
+Následně jsme podle vzorců \eqref{regrese-zakladni} a \eqref{regrese-excitovany} vynesli závislost $\left(P_a - R_b\right)/\mathrm{h}\left(2J + 1\right)$ na $\left(2J + 1\right)^2$ do grafu na obrázku č. \ref{co-fit} dole. Pomocí lineární regrese metodou nejmenších čtverců jsme nalezli konstanty $B_0, B_1, D_0, D_1$.
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{r|r|r}
+        \bfseries A &
+        \bfseries hodnota &
+        \bfseries směr. odch.
+        \csvreader[ head to column names ]{fitCO.csv.tmp}{}
+        {
+            \csviffirstrow{\\\hline}{\\}
+            \coleqn & \colvalue & \colstdev
+        }
+    \end{tabular}
+    \caption{Konstanty charakteristické pro molekulu CO získané regresí}
+    \label{tab-co}
+\end{table}
+
 
 \begin{figure}[p]
     \centering
-    \begin{gnuplot}[terminal=epslatex,terminaloptions=color]
+    \begin{gnuplot}[terminal=epslatex,terminaloptions={color size 18cm, 8cm}]
         data = 'data/VZDUCH_GRNO.PRN'
         set key left top
         set xrange [4500:500] reverse
-        set xlabel "$k \\; [\\U{cm^{-1}}]$"
+        set xlabel "$\\tilde\\nu \\; [\\U{cm^{-1}}]$"
         set ylabel "$T$"
         plot \
             data using ($1 >= 4000 ? $1 : 1/0):2 w l lc black notitle, \
-            data using (4000 >= $1 && $1 >= 3500 ? $1 : 1/0):2 w l t "$H_2O$, 1. harm.", \
+            data using (4000 >= $1 && $1 >= 3500 ? $1 : 1/0):2 w l t "$H_2O$, 1. h." lc 'green', \
             data using (3500 >= $1 && $1 >= 2400 ? $1 : 1/0):2 w l lc black notitle, \
-            data using (2400 >= $1 && $1 >= 2240 ? $1 : 1/0):2 w l t "$CO_2$, 1. harm.", \
+            data using (2400 >= $1 && $1 >= 2240 ? $1 : 1/0):2 w l t "$CO_2$, 1. h.", \
             data using (2240 >= $1 && $1 >= 2050 ? $1 : 1/0):2 w l lc black notitle, \
-            data using (2050 >= $1 && $1 >= 1330 ? $1 : 1/0):2 w l t "$H_2O$, 2. harm.", \
+            data using (2050 >= $1 && $1 >= 1330 ? $1 : 1/0):2 w l t "$H_2O$, 2. h.", \
             data using (1330 >= $1 && $1 >= 705  ? $1 : 1/0):2 w l lc black notitle, \
-            data using (705 >= $1 && $1 >= 670.5 ? $1 : 1/0):2 w l t "$CO_2, P$, 2. harm." lc 'red', \
-            data using (670.5 >= $1 && $1 >= 666 ? $1 : 1/0):2 w l t "$CO_2, Q$, 2. harm.", \
-            data using (666 >= $1 && $1 >= 620 ? $1 : 1/0):2 w l t "$CO_2, R$, 2. harm.", \
+            data using (705 >= $1 && $1 >= 670.5 ? $1 : 1/0):2 w l t "$CO_2, P$, 2. h." lc 'red', \
+            data using (670.5 >= $1 && $1 >= 666 ? $1 : 1/0):2 w l t "$CO_2, Q$, 2. h.", \
+            data using (666 >= $1 && $1 >= 620 ? $1 : 1/0):2 w l t "$CO_2, R$, 2. h.", \
             data using (620 >= $1 ? $1 : 1/0):2 w l lc black notitle
     \end{gnuplot}
     \caption{Měření transmitance vzduchu}
     \label{vzduch-trans}
 \end{figure}
 
+\begin{figure}[p]
+    \centering
+    \begin{gnuplot}[terminal=epslatex,terminaloptions={color size 18cm, 8cm}]
+
+        data1 = 'data/POL1_GRNO.PRN'
+        data2 = 'data/POL2_GRNO.PRN'
+        data3 = 'data/POL3_GRNO.PRN'
+        dataV = 'data/VZDUCH_GRNO.PRN'
+
+        set key left bottom
+        set xrange [4000:500] reverse
+        set yrange [0:1.1]
+        set xlabel "$\\tilde\\nu \\; [\\U{cm^{-1}}]$"
+        set ylabel "$T$"
+        
+        plot \
+            dataV u 1:(1+$2) w l lc 'grey' t 'vzduch', \
+            \
+            data1 using ($1 >= 3925 ? $1 : 1/0):2 w l lc 'red' t 'vzorek 1', \
+            data1 using (3925 >= $1 && $1 >= 3560 ? $1 : 1/0):2 w l lc '#dd9999' notitle, \
+            data1 using (3560 >= $1 && $1 >= 2387 ? $1 : 1/0):2 w l lc 'red' notitle, \
+            data1 using (2387 >= $1 && $1 >= 2300 ? $1 : 1/0):2 w l lc '#dd9999' notitle, \
+            data1 using (2300 >= $1 && $1 >= 1873 ? $1 : 1/0):2 w l lc 'red' notitle, \
+            data1 using (1873 >= $1 && $1 >= 1534 ? $1 : 1/0):2 w l lc '#dd9999' notitle, \
+            data1 using (1534 >= $1 && $1 >= 705  ? $1 : 1/0):2 w l lc 'red' notitle, \
+            data1 using (705 >= $1 && $1 >= 660 ? $1 : 1/0):2 w l lc '#dd9999' notitle, \
+            data1 using (660 >= $1 ? $1 : 1/0):2 w l lc 'red' notitle, \
+            \
+            data2 using ($1 >= 3925 ? $1 : 1/0):2 w l lc 'green' t 'vzorek 1', \
+            data2 using (3925 >= $1 && $1 >= 3560 ? $1 : 1/0):2 w l lc '#99dd99' notitle, \
+            data2 using (3560 >= $1 && $1 >= 2387 ? $1 : 1/0):2 w l lc 'green' notitle, \
+            data2 using (2387 >= $1 && $1 >= 2300 ? $1 : 1/0):2 w l lc '#99dd99' notitle, \
+            data2 using (2300 >= $1 && $1 >= 1873 ? $1 : 1/0):2 w l lc 'green' notitle, \
+            data2 using (1873 >= $1 && $1 >= 1503 ? $1 : 1/0):2 w l lc '#99dd99' notitle, \
+            data2 using (1503 >= $1 && $1 >= 690  ? $1 : 1/0):2 w l lc 'green' notitle, \
+            data2 using (690 >= $1 && $1 >= 660 ? $1 : 1/0):2 w l lc '#99dd99' notitle, \
+            data2 using (660 >= $1 ? $1 : 1/0):2 w l lc 'green' notitle, \
+            \
+            data3 using ($1 >= 3925 ? $1 : 1/0):2 w l lc 'blue' t 'vzorek 1', \
+            data3 using (3925 >= $1 && $1 >= 3560 ? $1 : 1/0):2 w l lc '#9999dd' notitle, \
+            data3 using (3560 >= $1 && $1 >= 2387 ? $1 : 1/0):2 w l lc 'blue' notitle, \
+            data3 using (2387 >= $1 && $1 >= 2300 ? $1 : 1/0):2 w l lc '#9999dd' notitle, \
+            data3 using (2300 >= $1 && $1 >= 1873 ? $1 : 1/0):2 w l lc 'blue' notitle, \
+            data3 using (1873 >= $1 && $1 >= 1490 ? $1 : 1/0):2 w l lc '#9999dd' notitle, \
+            data3 using (1490 >= $1 && $1 >= 1422 ? $1 : 1/0):2 w l lc 'blue' notitle, \
+            data3 using (1422 >= $1 && $1 >= 1384 ? $1 : 1/0):2 w l lc '#9999dd' notitle, \
+            data3 using (1384 >= $1 && $1 >= 675  ? $1 : 1/0):2 w l lc 'blue' notitle, \
+            data3 using (675 >= $1 && $1 >= 660 ? $1 : 1/0):2 w l lc '#9999dd' notitle, \
+            data3 using (660 >= $1 ? $1 : 1/0):2 w l lc 'blue' notitle
+
+    \end{gnuplot}
+    \caption{Měření transmitance polymerových folií. Rysy způsobené fluktuací složení vzduchu jsou vykresleny světlejší a méně sytou barvou.}
+    \label{pol-trans}
+\end{figure}
+
+% \begin{figure}[p]
+%     \centering
+%     \begin{gnuplot}[terminal=epslatex,terminaloptions={color size 18cm, 8cm}]
+        
+%         dataT = 'data/SKLO_GRNO.PRN'
+%         dataR = 'data/SKLO_REFL_GRNO.PRN'
+
+%         set ylabel 'T'
+%         set y2label 'R'
+
+%         plot dataT w l notitle, dataR w l notitle axes x1y2
+
+%     \end{gnuplot}
+%     \caption{Měření transmitance a odrazivosti skla}
+%     \label{sklo-trans-refl}
+% \end{figure}
 
 
 \pagebreak

@@ -7,13 +7,16 @@ latex:
 
 clean:
 	rm -rf *.aux
+	rm -rf *.bbl
+	rm -rf *.blg
 	rm -rf *.fdb_latexmk
 	rm -rf *.fls
 	rm -rf *.log
 	rm -rf *.synctex.gz
 	rm -rf *-gnuplottex-*
 	rm -rf *.gnuploterrors
-	rm -rf *.dat.tmp
+	rm -rf *.tmp
+	rm -f protokol.out
 
 clean-all: clean
 	rm -rf protokol.pdf
