@@ -4,6 +4,8 @@ latex:
 	xelatex protokol.tex
 	xelatex protokol.tex
 
+quick:
+	xelatex -shell-escape protokol.tex
 
 clean:
 	rm -rf *.aux

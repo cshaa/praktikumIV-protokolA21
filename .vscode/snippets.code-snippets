@@ -33,6 +33,11 @@
 		],
 		"description": "Insert a table"
 	},
+	"Multicolumn": {
+		"scope": "latex",
+		"prefix": "COL",
+		"body": "\\multicolumn{1}{$1}{$2}"
+	},
 	"Figure": {
 		"scope": "latex",
 		"prefix": "FIG",
