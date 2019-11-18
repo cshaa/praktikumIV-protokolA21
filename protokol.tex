@@ -359,6 +359,9 @@ Pro převod z atomových jednotek na jednotky SI platí následující vztah:
         B0_exp = exponent(B0)
         B1_exp = exponent(B1)
 
+
+        set print "fitCO_B.csv.tmp"
+        print sprintf("colqty,colunit,colvalue,colstdev")
         print sprintf("$B_1$,$[10^{%d} \\U{s^{-1}}]$,%.4f,%.4f", B1_exp, manexp(B1, -B1_exp), manexp(B1_err, -B1_exp))
         print sprintf("$B_0$,$[10^{%d} \\U{s^{-1}}]$,%.4f,%.4f", B0_exp, manexp(B0, -B1_exp), manexp(B0_err, -B0_exp))
 
@@ -391,10 +394,12 @@ Pro převod z atomových jednotek na jednotky SI platí následující vztah:
         r12_1_err = .5 * r12_1 * B1_err / B1
         r13_0_err = .5 * r13_0 * B0_err / B0
         r13_1_err = .5 * r13_1 * B1_err / B1
-        set print "co_r.csv.tmp"
+        set print "co_r12.csv.tmp"
         print "colqty,colvalue,colstdev"
         print sprintf("$r_{12,0}$,%.5f,%.5f", r12_0, r12_0_err)
         print sprintf("$r_{12,1}$,%.5f,%.5f", r12_1, r12_1_err)
+        set print "co_r13.csv.tmp"
+        print "colqty,colvalue,colstdev"
         print sprintf("$r_{13,0}$,%.5f,%.5f", r13_0, r13_0_err)
         print sprintf("$r_{13,1}$,%.5f,%.5f", r13_1, r13_1_err)
 
@@ -424,6 +429,11 @@ Následně jsme podle vzorců \eqref{regrese-excitovany} a \eqref{regrese-zaklad
             \csviffirstrow{\\\hline}{\\}
             \colqty & \colunit & \colvalue & $\pm$ \colstdev
         }
+        \csvreader[ head to column names ]{fitCO_B.csv.tmp}{}
+        {
+            \csviffirstrow{\\\hline}{\\}
+            \colqty & \colunit & \colvalue & $\pm$ \colstdev
+        }
     \end{tabular}
     \caption{Konstanty charakteristické pro molekulu CO získané regresí. První čtyři řádky odpovídají přímo parametrům fitu dle rovnic \eqref{regrese-excitovany} a \eqref{regrese-zakladni}, poslední dva řádky jsme dostali prostým vyjádřením $B$.}
     \label{tab-co}
@@ -436,7 +446,12 @@ Poté jsme použili známé redukované hmotnosti z tabulky č. \ref{redukovane-
     \begin{tabular}{ r|rl }
         \bfseries vel. &
         \multicolumn{2}{c}{ $[10^{-10} \U{m}]$ }
-        \csvreader[ head to column names ]{co_r.csv.tmp}{}
+        \csvreader[ head to column names ]{co_r12.csv.tmp}{}
+        {
+            \csviffirstrow{\\\hline}{\\}
+            \colqty & \colvalue & $\pm$ \colstdev
+        }
+        \csvreader[ head to column names ]{co_r13.csv.tmp}{}
         {
             \csviffirstrow{\\\hline}{\\}
             \colqty & \colvalue & $\pm$ \colstdev
@@ -568,21 +583,24 @@ Poslední dvojici maxim sdílí vzorky 2 a 3. Jeden peak se nachází na $\tilde
 
 Shrneme-li nyní pozorované rysy, dospějeme k následujícímu závěru: vzorky 1 a 3 jsou si nejméně podobné, vzorek 2 sdílí některé rysy se vzorkem 1 a některé se vzorkem 3. Vzorek 1 splňuje nejvíce kritérií, která by měl splňovat PP (jmenovitě maximum na $\tilde\nu = 1375 \U{cm^{-1}}$, les maxim mezi 1330 a 800 \U{cm^{-1}}) a nesplňuje některá kritéria, která by měl splňovat PE (maximum na $\tilde\nu = 720 \U{cm^{-1}}$). Oproti tomu vzorek 3 nesplňuje zmíněná kritéria pro PP a splňuje kritéria pro PE. S těmito informacemi můžeme učinit závěr, že \textbf{vzorek 1 byl z polypropylenu, vzorek 3 byl z polyetylenu a vzorek 2 byl z jejich směsi, anebo jiného podobného plastu}.
 
+
+\subsection{Sklo a safír}
+
 \begin{figure}[p]
     \centering
     \begin{gnuplot}[terminal=epslatex,terminaloptions={color size 18cm, 8cm}]
         
         dataT = 'data/SKLO_GRNO.PRN'
         dataR = 'data/SKLO_REFL_GRNO.PRN'
+        dataV = 'data/VZDUCH_GRNO.PRN'
 
         set xrange [500:4000] reverse
         # set xlabel '$\\tilde\\nu [\\U{cm^{-1}}]$'
-        set yrange [0:1]
-        set y2range [0:1]
-        set ylabel '$T$'
-        set y2label '$R$'
+        set ylabel '$T, R$'
 
-        plot dataT w l notitle, dataR w l notitle axes x1y2
+        plot \
+            dataV u 1:(1+$2) w l lc 'grey' t 'vzduch', \
+            dataT w l lc 'red' t "T", dataR w l lc 'blue' t "R"
 
     \end{gnuplot}
     \caption{Měření transmitance a odrazivosti skla}
@@ -595,31 +613,71 @@ Shrneme-li nyní pozorované rysy, dospějeme k následujícímu závěru: vzork
         
         dataT = 'data/SAFIR_GRNO.PRN'
         dataR = 'data/SAFIR_REFL_GRNO.PRN'
+        dataV = 'data/VZDUCH_GRNO.PRN'
 
         set xrange [500:4000] reverse
         # set xlabel '$\\tilde\\nu [\\U{cm^{-1}}]$'
-        set yrange [0:1]
-        set y2range [0:1]
-        set ylabel '$T$'
-        set y2label '$R$'
+        set ylabel '$T, R$'
 
-        plot dataT w l notitle, dataR w l notitle axes x1y2
+        plot \
+            dataV u 1:(1+$2) w l lc 'grey' t 'vzduch', \
+            dataT w l lc 'red' t "T", dataR w l lc 'blue' t "R"
 
     \end{gnuplot}
     \caption{Měření transmitance a odrazivosti safíru}
     \label{safir-trans-refl}
 \end{figure}
 
+Nakonec jsme měřili transmitanci a reflektanci skla a safíru. Před měřením transmitance byla provedena kalibrace změřením prázdné komory bez vzorku, před měřením reflektance jsme provedli kalibraci pro odraz na zlatém zrcátku. Naměřená spektra jsou v obrázcích č. \ref{sklo-trans-refl} a \ref{safir-trans-refl}.
 
-\pagebreak
+U obou vzorků lze pozorovat změnu atmosférických podmínek od kalibrace – vystupují zde pásy CO$_2$ i vodních par, jak jsme je identifikovali v grafu na obrázku č. \ref{vzduch-trans}. Z grafů zřejmé, že safír má mnohem lepší optické vlastnosti než sklo: lepší transmitance do 1500 \U{cm^{-1}}, jednodušší závislost transmitance na $\tilde\nu$, výrazně vyšší reflektance.
+
+Vidíme, že Drudeho model volných nábojů (viz \cite{studijni-text}) je vhodný pro modelování transmitance a reflektance krystalického safíru, ale v případě amorfního skla selhává, protože skutečná závislost je mnohem složitější.
+
+U skla můžeme v oblasti 2300 až 3500 \U{cm^{-1}} pozorovat ve spektru periodickou "oscilaci". To je způsobeno interferencí na tenké vrstvě.
 
 
 \section{Diskuse}
 Při výpočtu vzdálenosti atomů molekuly CO podle vzorce \eqref{vzdalenost-atomu} byla v redukované hmotnosti zanedbána vazebná energie molekuly, ta je řádově $10 \U{eV}$ \cite{wiki:carbon-monoxide}. Rychlý výpočet ukazuje, že $m_\mathrm{CO} \; c^2 \approx (12\U{u} + 16\U{u})c^2 \approx 10^{10} \U{eV}$, tedy vazbová energie tvoří řádově $10^{-9}$ hmotnosti molekuly. Protože byla chyba $B$ řádově $10^{-4}$, šlo o oprávněnou aproximaci.
 
+Podařilo se určit konstantu $B$ s relativní chybou řádově $10^{-4}$. Bylo by vhodné ověřit, zda se při takto přesných hodnotách již neprojevuje nějaká systematická aparatury. Je tedy možné, že skutečná chyba bude řádově větší.
+
+Nepodařilo se ve spektru $^{12}$C$^{16}$O identifikovat izotopolog $^{13}$C$^{16}$O, ačkoliv byl jejich rozdíl řádově vyšší než rozlišení aparatury. To mohlo být způsobeno buď nedostatečnou přítomností tohoto izotopologu, takže nebyl vidět přes šum, anebo překryvem pásů obou izotopomerů.
+
 
 \section{Závěr}
-Bylo to hezké. assadfasd
+Podařilo se naměřit rotačně-vibrační spektrum oxidu uhelnatého, z něj určit rotační konstantu $B$ pro excitovaný a základní stav molekuly CO:
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{ccrl}
+        \csvreader[ head to column names ]{fitCO_B.csv.tmp}{}
+        {
+            \csviffirstrow{}{\\}
+            \colqty & \colunit & = \colvalue & $\pm$ \colstdev
+        }
+    \end{tabular}
+\end{table}
+Z ní se podařilo vypočítat vzdálenosti jader atomů molekuly CO v excitovaném a základním stavu:
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{ r|rl }
+        \bfseries vel. &
+        \multicolumn{2}{c}{ $[10^{-10} \U{m}]$ }
+        \csvreader[ head to column names ]{co_r12.csv.tmp}{}
+        {
+            \csviffirstrow{\\\hline}{\\}
+            \colqty & \colvalue & $\pm$ \colstdev
+        }
+    \end{tabular}
+\end{table}
+
+Podařilo se spočítat teplotní a tlakové rozšíření absorpčních pásů. Rozšíření pásů i rozlišení přístroje byly řádově větší, než rozdíl vibrační frekvence dvou izotopologů CO, přesto se $^{13}$C$^{16}$O nepodařilo ve spektru identifikovat.
+
+Podařilo se změřit transmitanci vzduchu a interpretovat v ní nejvýraznější rysy.
+
+Podařilo se na základě spektra určit složení folií – vzorek 1 byl složený z polypropylenu, vzorek 3 z polyetylenu a vzorek 2 jevil rysy obou.
+
+Podařilo se změřit a popsat transmitanci a reflektanci skla a safíru. Safír měl lepší optické vlastnosti a lépe odpovídal Drudeho modelu.
 
 \section{Literatura}
 \bibliography{literatura} 
