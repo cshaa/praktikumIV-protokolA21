@@ -274,26 +274,80 @@ Následně jsme měřili charakteristická spektra pro různé materiály anod. 
 
         y(n, theta) = sqrt(n/sin(theta*deg))
 
+        A = 1
+        B = 1
+        C = 1
+        D = 1
+        f(x) = A*(x-B)
+        g(x) = C*(x-D)
+
+        fit f(x) 'data_charakt.csv' skip 1 using 5:(y($1,$3)) via A,B
+        fit g(x) 'data_charakt.csv' skip 1 using 5:(y($1,$4)) via C,D
+
+        set key left top
         set xrange [24:44]
         set yrange [1.2:2.8]
-        plot 'data_charakt.csv' skip 1 using 5:(y($1,$3)) notitle
+        set xlabel "$\sqrt{n/\sin\varphi}$"
+        set ylabel "$Z$"
+        plot 'data_charakt.csv' skip 1 using 5:(y($1,$3)) title '$K_\alpha$' lc rgb 'red', 'data_charakt.csv' skip 1 using 5:(y($1,$4)) title '$K_\beta$' lc rgb 'blue', f(x) notitle lc rgb 'red', g(x) notitle lc rgb 'blue'
 
+        set print 'fity.csv.tmp'
+        print 'valA,valB,valC,valD'
+        print sprintf("%.4f, %.4f, %.4f, %.4f", A, B, C, D)
+
+
+        Ralpha = 4*pi*c/(3*d) * A**2 * 1e-16
+        Rbeta = 9*pi*c/(8*d) * C**2 * 1e-16
+
+        set print 'rydberg.csv.tmp'
+        print 'valalpha, valbeta'
+        print sprintf("%.4f, %.4f", Ralpha, Rbeta)
     \end{gnuplot}
     \caption{Lineární závislost z \eqref{linearni-k-alpha} a \eqref{linearni-k-beta}}
     \label{graf-linearni}
 \end{figure}
 
+Proložením z grafu jsme získali parametry fitu 
+\csvreader[ head to column names ]{fity.csv.tmp}{}
+{
+    $A(K_\alpha) = \valA, \; B(K_\alpha) = \valB \; A(K_\beta) = \valC \; B(K_\beta) = \valD$
+}. Z toho jsme vypočetli hodnoty Rydbergových konstant:
+\begin{align*}
+    \csvreader[ head to column names ]{rydberg.csv.tmp}{}
+    {
+        K_\alpha: \; R_\omega &= \valalpha \cdot 10^{16} \U{s^{-1}}\\
+        K_\beta: \; R_\omega &= \valbeta \cdot 10^{16} \U{s^{-1}}
+    }
+\end{align*}
 
+
+\pagebreak
 
 \section{Diskuse}
+Při měření se vyskytovala systematická chyba naměřeného úhlu. Ta byla korigována tak, aby $h$ vycházelo podle tabelovaných hodnot.
+Vypočtená Rydbergova konstanta je zatížena velkou statistickou chybou danou malým počtem naměřených bodů pro lineární regresi.
 
 
 \section{Závěr}
+Podařilo se vypočítat hodnotu Planckovy konstanty, jejím porovnáním se skutečnou hodnotou se podařilo určit systematickou chybu úhlu $\vartheta_0 = 0.574 \°$.
+
+Podařilo se ověřit platnost Moseleyova zákona. Rydbergovy konstanty, které vyšly byly:
+\begin{align*}
+    \csvreader[ head to column names ]{rydberg.csv.tmp}{}
+    {
+        K_\alpha: \; R_\omega &= \valalpha \cdot 10^{16} \U{s^{-1}}\\
+        K_\beta: \; R_\omega &= \valbeta \cdot 10^{16} \U{s^{-1}}
+    }
+\end{align*}
+Skutečná hodnota Rydbergovy konstanty je:
+\begin{equation*}
+    R_\omega = 2.0606 \cdot 10^{16} \U{s^{-1}}
+\end{equation*}
+
 
 
 
 \section{Literatura}
-\bibliography{literatura} 
-\bibliographystyle{ieeetr}
+[1] Studijní texty k laboratorní úloze: Studium rentgenových spekter; Kolektiv autorů ZFP KVOF MFF UK, online zdroj, [cit. 20.11.2019], dostupné na stránkách fyzikálního praktika IV
  
 \end{document}
