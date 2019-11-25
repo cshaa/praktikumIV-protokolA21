@@ -100,9 +100,9 @@
         \end{enumerate}
         \item Moseleyův zákon
         \begin{enumerate}
-            \item Přesvědčte se, že naměřené úhlové frekvence spektrálních čar Kα a Kβ pro různé prvky splňují Moseleyův zákon. Ze směrnice příslušné závislosti určete hodnotu Rydbergovy úhlové frekvence a využitím této hodnoty určete též průměrnou hodnotu stínící konstanty.
+            \item Přesvědčte se, že naměřené úhlové frekvence spektrálních čar $K_\alpha$ a $K_\beta$ pro různé prvky splňují Moseleyův zákon. Ze směrnice příslušné závislosti určete hodnotu Rydbergovy úhlové frekvence a využitím této hodnoty určete též průměrnou hodnotu stínící konstanty.
             \item Přesvědčte se, že i naměřené polohy absorpčních hran Zr a Ni splňují Moseleyův zákon.
-            \item Všimněte si, že absorpční hrana Ni koinciduje se spektrální čarou Kβ mědi; této skutečnosti se využívá v rentgenové difraktografii pro monochromatizaci charakteristického spektra mědi. Z provedeného měření určete filtrační efekt niklu pro čáru Kβ.
+            \item Všimněte si, že absorpční hrana Ni koinciduje se spektrální čarou $K_\beta$ mědi; této skutečnosti se využívá v rentgenové difraktografii pro monochromatizaci charakteristického spektra mědi. Z provedeného měření určete filtrační efekt niklu pro čáru $K_\beta$.
         \end{enumerate}
         \item Úhlová disperze
         \begin{enumerate}
@@ -113,9 +113,176 @@
 
 
 \section{Teoretická část}
+Rentgenka je zařízení, které vyzařuje rentgenové záření, pokud mu dodáváme dostatečné napětí. Je tvořena vakuovou baňkou, uvnitř které se nachází žhavená katoda, z níž vylétávají elektrony, a anoda, na kterou dopadají a při dopadu vyzařují elektromagnetické záření v rentgenové oblasti. Vznikající záření má dvě složky odpovídající dvěma různým způsobům, kterými vzniká. Jednak spojité brzdné záření, které vzniká když elektron prudce brzdí v elektromagnetickém poli anody. Toto záření není závislé na materiálu anody a nejvíce energetický foton, který dokáže při daném napětí vyprodukovat, má vlnovou délku $\lambda_m$, pro kterou platí
+\begin{equation}
+    eU = \frac{hc}{\lambda_m}.
+    \label{mezni_lambda}
+\end{equation}
+
+My budeme provádět spektroskopii pomocí difrakce na mřížce LiF, vztah mezi měřeným úhlem a odpovídající vlnovou délkou udává tzv. Braggova rovnice:
+\begin{equation}
+    2d \sin \varphi = n\lambda,
+    \label{bragg}
+\end{equation}
+kde $d=201.4 \U{pm}$ je mřížková konstanta LiF a $n$ je celé číslo udávající řád difrakčního maxima. Víme, že naměřený úhel v našem zařízení je zatížený aditivní chybou, z měření tedy budeme mít úhly $\vartheta$, pro které platí $\varphi = \vartheta + \vartheta_0$.
+
+Budeme chtít pro ověření z naměřených dat vypočítat Planckovu konstatnu, vyjádříme si ji z rovnic~\eqref{mezni_lambda}~a~\eqref{bragg}, pro mezní úhel $\varphi_m$ potom bude platit:
+\begin{align}
+    h &= \frac{2eUd}{c} \frac{\sin \varphi_m}{n}, &
+    \Delta h &= \frac{2eUd}{c} \frac{\cos \varphi_m}{n} \; \Delta\varphi
+    \label{planck}
+\end{align}
+
+
+Druhý typ záření, který rentgenka produkuje, je tzv. charakteristické záření, které vzniká při excitaci a následné deexcitaci atomu anody. Toto záření je závislé na materiálu anody, úhlová frekvence fotonu odpovídající přechodu z $m$-tého excitovaného stavu do $n$-tého stavu je podle Rydbergova vztahu
+\begin{equation}
+    \omega = R_\omega (Z - s)^2 \left( \frac{1}{n^2} - \frac{1}{m^2} \right),
+\end{equation}
+kde $Z$ je atomové číslo prvku anody, $s$ je stínící konstanta a pro $R_\omega$ platí
+\begin{equation}
+    R_\omega = \frac{m_e e^4}{32 \pi^2 {\varepsilon_0}^2 \hbar^3}
+    \approx  2.0606 \cdot 10^{16} \U{s^{-1}}
+\end{equation}
+Nás budou zajímat především spektrální čáry $K_\alpha$ a $K_\beta$, které odpovídají pádu z $m=2$, resp. $m=3$ do základního stavu $n=1$. Dosazením $m,n$ dostaneme tzv. Moseleyův zákon, který určuje vztah $\omega$ a $Z$:
+\begin{align}
+    \sqrt{\omega(K_\alpha)} &= \frac{\sqrt{3R_\omega}}{2}(Z-s),
+    \label{omega-k-alpha} \\
+    \sqrt{\omega(K_\beta)}  &= \frac{\sqrt{8R_\omega}}{3}(Z-s).
+    \label{omega-k-beta}
+\end{align}
+Převedeme-li vlnovou délku v rovnici \eqref{bragg} na úhlovou frekvenci a dosadíme-li do předchozích rovnic, dostaneme lineární vztah:
+\begin{align}
+    \sqrt{\frac{n}{\sin\varphi(K_\alpha)}}
+    = \frac{1}{2}\sqrt{ \frac{3R_\omega d}{\pi c} }(Z - s),
+    \label{linearni-k-alpha} \\
+    \sqrt{\frac{n}{\sin\varphi(K_\beta)}}
+    = \frac{1}{3}\sqrt{ \frac{8R_\omega d}{\pi c} }(Z - s).
+    \label{linearni-k-beta}
+\end{align}
+To jsou lineární vztahy tvaru $y = A(x - B)$, ze kterých můžeme lineární regresí zjistit stínící konstantu $s=B$ a Rydbergovu konstantu $R_\omega = \tfrac{4 \pi c}{3 d} A^2$, resp. $\tfrac{9 \pi c}{8 d} A^2$.
 
 
 \section{Výsledky měření}
+Nejprve jsme měřili brzdné záření na rentgence s měděnou anodou. Extrapolací z grafů jsme určili mezní úhly:
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{ r|rl }
+        \bfseries $U [\U{kV}]$ &
+        \multicolumn{2}{c}{$\vartheta [\°]$}
+        \csvreader[ head to column names ]{data_brzdne.csv}{}
+        {
+            \csviffirstrow{\\\hline}{\\}
+            \valU & \valtheta & $\pm$ \valthetaerr
+        }
+    \end{tabular}
+    \caption{Mezní úhly $\vartheta$}
+    \label{mezni-uhly}
+\end{table}
+
+\begin{figure}[p]
+    \centering
+    \begin{gnuplot}[terminal=epslatex,terminaloptions={color size 18cm, 8cm}]
+
+        set datafile separator ','
+        load 'constants.cfg'
+
+        LF_File = "data_brzdne.csv"
+        LF_Columns = 3
+        load 'loadfile.cfg'
+
+        N = LF_Rows - 1
+        array U[N]
+        array theta[N]
+        array thetaerr[N]
+        do for [i = 1:N] {
+            U[i]        = LF_Col1[i+1]*1000
+            theta[i]    = LF_Col2[i+1]
+            thetaerr[i] = LF_Col3[i+1]
+        }
+
+        array h[N]
+        array herr[N]
+        do for [i = 1:N] {
+            const = 2*e*U[i]*(d/c)
+            h[i] = const * sin(theta[i]*deg)
+            herr[i] = const * cos(theta[i]*deg) * thetaerr[i]*deg
+        }
+
+        set print "data_planck.csv.tmp"
+        print "valU,valh,valherr"
+        do for [i = 1:N] {
+            print sprintf("%d,%f,%f", U[i]/1000, h[i]*1e34, herr[i]*1e34)
+        }
+
+        A = 1
+        f(x) = A
+        hh(x) = hh*1e34
+        fit f(x) 'data_planck.csv.tmp' skip 1 using 1:2:3 yerrors via A
+
+        set xrange [12:36]
+        set yrange [5.6:6.8]
+        set xlabel "$\theta [\°]$"
+        set ylabel "$h [\U{10^{-34} J}]$"
+        plot sample [i=1:N] '+' using (U[i]/1000):(h[i]*1e34):(herr[i]*1e34) w yerrorbars t "data", f(x) t "vážený průměr", hh(x) t "skutečná hodnota"
+
+    \end{gnuplot}
+    \caption{Naměřené hodnoty Planckovy konstanty}
+    \label{graf-planck}
+\end{figure}
+
+Připomínáme, že $\vartheta$ značíme úhel ještě před korekcí na systematickou chybu. Úhel po korekci značíme $\varphi = \vartheta + \vartheta_0$.
+
+Hodnoty Planckovy konstanty vypočtené podle \eqref{planck}, jejich průměř\footnote{Průměr je vážený převráceným čtvercem chyby.} a porovnání se skutečnou hodnotou je v grafu č. \ref{graf-planck}. Vidíme, že se skutečná hodnota signifikantně liší od té naměřené – to protože jsme zatím předpokládali, že systematická chyba $\vartheta_0 = 0$. Numericky nyní vyřešíme, pro jakou hodnotu $\vartheta_0$ se budou skutečná hodnota $h$ a vážený průměr rovnat. Získáme tím
+\begin{equation}
+    \vartheta_0 = 0.574 \°.
+    \label{systematicka_chyba}
+\end{equation}
+
+Následně jsme měřili charakteristická spektra pro různé materiály anod. Pozorovali jsme maxima $n$-tého řádu na těchto úhlech:
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{ c|c|c|r|r }
+        \multicolumn{1}{c|}{prvek} &
+        \multicolumn{1}{c|}{$n$} & 
+        \multicolumn{1}{c|}{$U [\U{kV}]$} &
+        \multicolumn{1}{c|}{$\theta(K_\alpha) [\°]$} &
+        \multicolumn{1}{c}{$\theta(K_\beta) [\°]$}
+        \csvreader[ head to column names ]{data_charakt.csv}{}
+        {
+            \csviffirstrow{\\\hline}{\\}
+            $^{\valZ}$\prvek &
+            \valn & \valU &
+            \thetaalpha &
+            \thetabeta
+        }
+    \end{tabular}
+    \caption{Úhly $\vartheta$ maxim charakteristického záření}
+    \label{charakt-uhly}
+\end{table}
+
+\begin{figure}[p]
+    \centering
+    \begin{gnuplot}[terminal=epslatex,terminaloptions={color size 18cm, 8cm}]
+        
+        set datafile separator ','
+        load 'constants.cfg'
+
+        LF_File = "data_charakt.csv"
+        LF_Columns = 6
+        load 'loadfile.cfg'
+
+        y(n, theta) = sqrt(n/sin(theta*deg))
+
+        set xrange [24:44]
+        set yrange [1.2:2.8]
+        plot 'data_charakt.csv' skip 1 using 5:(y($1,$3)) notitle
+
+    \end{gnuplot}
+    \caption{Lineární závislost z \eqref{linearni-k-alpha} a \eqref{linearni-k-beta}}
+    \label{graf-linearni}
+\end{figure}
+
 
 
 \section{Diskuse}
